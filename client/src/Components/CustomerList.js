@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { CustomerContext } from "../Context/Customercontext";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 
 const CustomerList = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const CustomerList = () => {
       <table className="table table-striped table-hover">
         <thead >
           <tr>
+            <th> ID</th>
             <th>Full Name</th>
             <th>Pan Card No</th>
             <th>Mobile</th>
@@ -23,6 +25,7 @@ const CustomerList = () => {
         <tbody>
           {customers.map((customer) => (
             <tr key={customer.id}>
+              <td>{customer.id} </td>
               <td>{customer.fullName}</td>
               <td>{customer.pancardno}</td>
               <td>{customer.mobile}</td>
@@ -36,7 +39,7 @@ const CustomerList = () => {
                 </button>
                 <button 
                   className="btn btn-danger btn-sm" 
-                  onClick={() => deleteCustomer(customer.id)}>
+                  onClick={() => {deleteCustomer(customer.id); toast.success("Customer Delete sucessfully ");}}>
                   Delete
                 </button>
               </td>
@@ -45,6 +48,7 @@ const CustomerList = () => {
         </tbody>
       </table>
       <Link to="/Customerform" className="btn btn-outline-primary">Add Customer</Link>
+      <ToastContainer />
     </div>
   );
 };

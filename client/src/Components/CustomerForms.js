@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { CustomerContext } from "../Context/Customercontext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 
 const CustomerForm = () => {
   const navigate = useNavigate();
@@ -17,23 +18,30 @@ const CustomerForm = () => {
   });
   const [panError, setPanError] = useState("");
 
+  // set data of customer if editingcustomer has value for edit 
   useEffect(() => {
     if (editingCustomer) {
       setCustomer(editingCustomer);
     }
   }, [editingCustomer]);
 
+
+// onchange of input feild input data will set to the customer 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCustomer({ ...customer, [name]: value });
   };
 
+  // onchange of input feild set address 
   const handleAddressChange = (index, e) => {
     const { name, value } = e.target;
     const addresses = [...customer.addresses];
     addresses[index] = { ...addresses[index], [name]: value };
     setCustomer({ ...customer, addresses });
   };
+
+
+// onclick of add address button add one more empty address form upto 10
 
   const handleAddAddress = () => {
     if (customer.addresses.length < 10) {
@@ -47,16 +55,22 @@ const CustomerForm = () => {
     }
   };
 
+
+// onclick of remove address id of particular address get filter and remove from state 
   const handleRemoveAddress = (index) => {
     const addresses = customer.addresses.filter((_, i) => i !== index);
     setCustomer({ ...customer, addresses });
   };
 
+
+  // vaidate pancard on vaild format 
   const validatePANFormat = (panNumber) => {
     const panRegex = /^[A-Z]{5}\d{4}[A-Z]$/;
     return panRegex.test(panNumber);
 };
 
+
+// verifypan and refill fullname on basisi of res
   const verifyPAN = async (panNumber) => {
     if (!validatePANFormat(panNumber)) {
       setPanError("Invalid PAN format");
@@ -86,6 +100,7 @@ const CustomerForm = () => {
       });
   };
 
+  // fetch data using api and refill state and city 
   const fetchPostcodeDetails = async (postcode, index) => {
     axios
       .post(
@@ -115,15 +130,17 @@ const CustomerForm = () => {
       });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log(e,"4554");
     if (panError) return;
     if (editingCustomer) {
       editCustomer(customer);
+      toast.success(" Customer Edit Sucessfully ")
     } else {
       addCustomer({ ...customer, id: Date.now() });
+      toast.success(" Customer add Sucessfully ")
     }
     setCustomer({
       pancardno: "",
@@ -133,10 +150,12 @@ const CustomerForm = () => {
       addresses: [{ line1: "", line2: "", postcode: "", state: "", city: "" }],
     });
     setEditingCustomer(null);
+    await new Promise(resolve => setTimeout(resolve,1000))
     navigate("/");
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit} className="container mt-5">
       <div className="row">
         <div className="form-group col-md-6">
@@ -323,6 +342,8 @@ const CustomerForm = () => {
       </div>
 
     </form>
+     <ToastContainer />
+     </>
   );
 };
 
