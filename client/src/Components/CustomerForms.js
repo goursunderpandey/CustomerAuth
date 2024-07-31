@@ -156,7 +156,9 @@ const CustomerForm = () => {
 
   return (
     <>
+    <h2 className=" d-flex justify-content-center mt-3"> Customer Form</h2>
     <form onSubmit={handleSubmit} className="container mt-5">
+      
       <div className="row">
         <div className="form-group col-md-6">
           <label htmlFor="pan">Pancard No :</label>
@@ -228,6 +230,18 @@ const CustomerForm = () => {
             />
           </div>
         </div>
+      </div>
+      <div className="row dflex justify-content-end  " style={{marginRight:"2px"}} >
+      {customer.addresses.length < 10 && (
+          <button
+            type="button"
+            className="btn btn-primary  col-2 mt-2"
+            onClick={handleAddAddress}
+            style={{paddingRight:"10px" ,width:"150px"}}
+          >
+            Add Address
+          </button>
+        )}
       </div>
 
       <div style={{ marginTop: "15px" }}>
@@ -316,7 +330,7 @@ const CustomerForm = () => {
               type="button"
               className="btn btn-danger m-3"
               onClick={() => handleRemoveAddress(index)}
-              
+              style={{width:"150px"}}
             >
               Remove Address
             </button>
@@ -324,18 +338,9 @@ const CustomerForm = () => {
         ))}
       </div>
 
-      <div className="row">
-        {customer.addresses.length < 10 && (
-          <button
-            type="button"
-            className="btn btn-primary  col-2"
-            onClick={handleAddAddress}
-            style={{paddingRight:"10px"}}
-          >
-            Add Address
-          </button>
-        )}
-        <button type="submit" className="btn btn-success col-3 ">
+      <div className="row " style={{marginLeft:"2px"}} >
+        
+        <button  style={{width:"150px"}}  type="submit" className="btn btn-success col-3 ">
           {editingCustomer ? "Update Customer" : "Add Customer"}
         </button>
 
